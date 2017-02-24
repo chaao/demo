@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+	
+	<property name="log_pattern" value="%d{MM-dd HH:mm:ss} [%thread] %-5level %logger{0} - %msg%n" />
+	
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder charset="UTF-8">
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.apache.http" level="error" />
+	<logger name="org.springframework" level="warn" />
+
+	<root level="info">
+		<appender-ref ref="stdout" />
+	</root>
+</configuration>

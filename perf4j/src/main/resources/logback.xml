@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+
+	<property name="log_history" value="7" />
+	<property name="log_dir" value="/data/logs/new_ufanode_down/" />
+	<property name="log_pattern" value="%d{MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" />
+
+	<!-- 全部日志 -->
+	<appender name="all" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}all.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}all.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 业务日志 -->
+	<appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}info.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 警告日志 -->
+	<appender name="warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}warn.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}warn.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+			<immediateFlush>false</immediateFlush>
+		</encoder>
+	</appender>
+
+	<!-- 错误日志 -->
+	<appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<file>${log_dir}error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}error.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	
+	<!-- monitor -->
+	<appender name="monitor" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}monitor.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}monitor.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- wssmonitor -->
+	<appender name="wssmonitor" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}wssmonitor.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}wssmonitor.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- perf4j -->
+	<appender name="perf4jlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}perf4j.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}perf4j.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="CoalescingStatistics" class="org.perf4j.logback.AsyncCoalescingStatisticsAppender">
+		<param name="TimeSlice" value="300000" />
+		<appender-ref ref="perf4jlog" />
+	</appender>
+	
+	<!-- KfsClient日志 -->
+	<appender name="kfsClient" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}client.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}info.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	
+	<logger name="org.perf4j.TimingLogger" level="INFO" additivity="false">
+		<appender-ref ref="CoalescingStatistics" />
+	</logger>
+	
+	<logger name="com.kingsoft.ufa.node.client" level="INFO" additivity="false">
+		<appender-ref ref="kfsClient"/>
+	</logger>
+	<logger name="upload" level="INFO" additivity="false">
+	    <appender-ref ref="upload" />
+	</logger>
+	<logger name="download" level="INFO" additivity="false">
+	    <appender-ref ref="download" />
+	</logger>
+	<logger name="monitor" level="INFO" additivity="false">
+		<appender-ref ref="monitor" />
+	</logger>
+	<logger name="wssmonitor" level="INFO" additivity="false">
+		<appender-ref ref="wssmonitor" />
+	</logger>
+	<logger name="org.springframework" level="INFO" />
+	<logger name="org.apache.http" level="INFO" />
+
+
+	<root level="info">
+		<!-- <appender-ref ref="all" /> -->
+		<appender-ref ref="info" />
+		<appender-ref ref="warn" />
+		<appender-ref ref="error" />
+	</root>
+
+</configuration>

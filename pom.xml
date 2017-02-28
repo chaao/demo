@@ -40,11 +40,15 @@
 
 	<dependencies>
 
-		<!-- framework -->
 		<dependency>
-			<groupId>com.evan</groupId>
-			<artifactId>myBaseFramework</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 
 		<!-- log4j2 -->
@@ -90,6 +94,12 @@
 			<version>3.3.6</version>
 		</dependency>
 
+		<!-- framework -->
+		<dependency>
+			<groupId>com.evan</groupId>
+			<artifactId>myBaseFramework</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 

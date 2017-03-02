@@ -97,7 +97,7 @@
 		<!-- framework -->
 		<dependency>
 			<groupId>com.evan</groupId>
-			<artifactId>myBaseFramework</artifactId>
+			<artifactId>baseFramework</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

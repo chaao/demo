@@ -10,7 +10,7 @@ import java.util.Map;
 import kafka.api.FetchRequest;
 import kafka.api.FetchRequestBuilder;
 import kafka.api.PartitionOffsetRequestInfo;
-import kafka.cluster.Broker;
+import kafka.cluster.BrokerEndPoint;
 import kafka.common.ErrorMapping;
 import kafka.common.TopicAndPartition;
 import kafka.javaapi.FetchResponse;
@@ -22,11 +22,6 @@ import kafka.javaapi.TopicMetadataResponse;
 import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.message.MessageAndOffset;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-
 public class TestSimpleConsumer {
 	public static void main(String arg[]) {
 		TestSimpleConsumer test = new TestSimpleConsumer();
@@ -34,11 +29,10 @@ public class TestSimpleConsumer {
 		long maxReads = 10;
 		int partition = 0;
 		List<String> brokers = new ArrayList<String>();
-		brokers.add("10.5.20.100");
-		brokers.add("10.5.20.18");
-		brokers.add("10.9.20.31");
+		brokers.add("127.0.0.1");
+		brokers.add("127.0.0.1");
+		brokers.add("127.0.0.1");
 		int port = 9092;
-
 
 		// try {
 		// example.run(maxReads, topic, partition, seeds, port);
@@ -49,8 +43,8 @@ public class TestSimpleConsumer {
 
 	private List<String> m_replicaBrokers = new ArrayList<String>();
 
-
-	public void run(long a_maxReads, String a_topic, int a_partition, List<String> a_seedBrokers, int a_port) throws Exception {
+	public void run(long a_maxReads, String a_topic, int a_partition, List<String> a_seedBrokers, int a_port)
+			throws Exception {
 		// find the meta data about the topic and partition we are interested in
 		//
 		PartitionMetadata metadata = findLeader(a_seedBrokers, a_port, a_topic, a_partition);
@@ -66,7 +60,8 @@ public class TestSimpleConsumer {
 		String clientName = "Client_" + a_topic + "_" + a_partition;
 
 		SimpleConsumer consumer = new SimpleConsumer(leadBroker, a_port, 100000, 64 * 1024, clientName);
-		long readOffset = getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.LatestTime(), clientName);
+		long readOffset = getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.LatestTime(),
+				clientName);
 
 		int numErrors = 0;
 		while (a_maxReads > 0) {
@@ -75,7 +70,8 @@ public class TestSimpleConsumer {
 			}
 			// Note: this fetchSize of 100000 might need to be increased if
 			// large batches are written to Kafka
-			FetchRequest req = new FetchRequestBuilder().clientId(clientName).addFetch(a_topic, a_partition, readOffset, 100000).build();
+			FetchRequest req = new FetchRequestBuilder().clientId(clientName)
+					.addFetch(a_topic, a_partition, readOffset, 100000).build();
 			FetchResponse fetchResponse = consumer.fetch(req);
 
 			if (fetchResponse.hasError()) {
@@ -88,7 +84,8 @@ public class TestSimpleConsumer {
 				if (code == ErrorMapping.OffsetOutOfRangeCode()) {
 					// We asked for an invalid offset. For simple case ask for
 					// the last element to reset
-					readOffset = getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.LatestTime(), clientName);
+					readOffset = getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.LatestTime(),
+							clientName);
 					continue;
 				}
 				consumer.close();
@@ -125,15 +122,18 @@ public class TestSimpleConsumer {
 			consumer.close();
 	}
 
-	public static long getLastOffset(SimpleConsumer consumer, String topic, int partition, long whichTime, String clientName) {
+	public static long getLastOffset(SimpleConsumer consumer, String topic, int partition, long whichTime,
+			String clientName) {
 		TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
 		Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
 		requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(whichTime, 1));
-		kafka.javaapi.OffsetRequest request = new kafka.javaapi.OffsetRequest(requestInfo, kafka.api.OffsetRequest.CurrentVersion(), clientName);
+		kafka.javaapi.OffsetRequest request = new kafka.javaapi.OffsetRequest(requestInfo,
+				kafka.api.OffsetRequest.CurrentVersion(), clientName);
 		OffsetResponse response = consumer.getOffsetsBefore(request);
 
 		if (response.hasError()) {
-			System.out.println("Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topic, partition));
+			System.out.println(
+					"Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topic, partition));
 			return 0;
 		}
 		long[] offsets = response.offsets(topic, partition);
@@ -189,8 +189,8 @@ public class TestSimpleConsumer {
 					}
 				}
 			} catch (Exception e) {
-				System.out.println("Error communicating with Broker [" + seed + "] to find Leader for [" + a_topic + ", " + a_partition
-						+ "] Reason: " + e);
+				System.out.println("Error communicating with Broker [" + seed + "] to find Leader for [" + a_topic
+						+ ", " + a_partition + "] Reason: " + e);
 			} finally {
 				if (consumer != null)
 					consumer.close();
@@ -198,7 +198,7 @@ public class TestSimpleConsumer {
 		}
 		if (returnMetaData != null) {
 			m_replicaBrokers.clear();
-			for (Broker replica : returnMetaData.replicas()) {
+			for (BrokerEndPoint replica : returnMetaData.replicas()) {
 				m_replicaBrokers.add(replica.host());
 			}
 		}

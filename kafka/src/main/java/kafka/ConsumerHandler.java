@@ -133,13 +133,15 @@ public class ConsumerHandler {
 
 	public static void main(String[] args) throws Exception {
 		ConsumerHandler handler = new ConsumerHandler();
-		handler.server = "127.0.0.1:9092";
+		handler.server = "127.0.0.1:9092,127.0.0.1:9092,127.0.0.1:9092";
 		handler.group = "test";
-		handler.topic = "request-uid-through-primary";
+		handler.topic = "test";
 
 		handler.init();
-		while(true){
-			System.out.println(handler.poll());
+		while (true) {
+			String record = handler.poll();
+			if (record != null)
+				System.out.println(handler.poll());
 		}
 
 	}

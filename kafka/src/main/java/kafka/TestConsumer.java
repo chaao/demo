@@ -27,14 +27,14 @@ public class TestConsumer {
 
 	public static void test() {
 		Properties props = new Properties();
-		props.put("zookeeper.connect", "106.75.9.5:2181,106.75.9.6:2181,106.75.9.7:2181/kafka");
+		props.put("zookeeper.connect", "127.0.0.1:2181,127.0.0.1:2181,127.0.0.1:2181/kafka");
 		props.put("group.id", "evan");
 		props.put("zookeeper.session.timeout.ms", "6000");//超时时间，临时节点
 		props.put("zookeeper.sync.time.ms", "2000");
 		props.put("auto.commit.interval.ms", "1000");
 		props.put("auto.offset.reset", "smallest");
 		ConsumerConnector consumer = Consumer.createJavaConsumerConnector(new ConsumerConfig(props));
-		String topic = "request-uid-through-primary";
+		String topic = "ad_rtb_exchange";
 		
 
 		Map<String, Integer> topicCountMap = new HashMap<String, Integer>();

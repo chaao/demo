@@ -68,13 +68,13 @@
 			<artifactId>log4j-1.2-api</artifactId>
 			<version>2.7</version>
 		</dependency>
-		<!-- Commons Logging Bridge (jcl) -->
+		<!-- Commons Logging Bridge (jcl) - depend on commons-logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-jcl</artifactId>
 			<version>2.7</version>
 		</dependency>
-		<!-- SLF4J Bridge -->
+		<!-- SLF4J Bridge - denend on slf4j-api -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>

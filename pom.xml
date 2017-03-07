@@ -29,6 +29,8 @@
 		<module>tools</module>
 		<module>alarm</module>
 		<module>dubbo</module>
+		<module>redis</module>
+		<module>deployer</module>
 	</modules>
 
 

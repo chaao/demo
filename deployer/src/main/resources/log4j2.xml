@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error" monitorInterval="600">
+
+	<properties>
+		<property name="LOG_HOME">/data/logs</property>
+	</properties>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level %thread %c - %msg%n" />
+		</Console>
+
+		<RollingFile name="configChange" fileName="${LOG_HOME}/configChange.log" filePattern="${LOG_HOME}/%d{yyyy-MM-dd}/configChange.log" append="true">
+			<PatternLayout pattern="%d{HH:mm:ss} %msg%xEx%n" />
+			<TimeBasedTriggeringPolicy />
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="2">
+					<IfFileName glob="*/configChange.log" />
+					<IfLastModified age="15d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		
+		<RollingFile name="monitor_falcon" fileName="${LOG_HOME}/monitor_falcon.log" filePattern="${LOG_HOME}/%d{yyyy-MM-dd}/monitor_falcon.log" append="true">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss}||%msg%xEx%n" />
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+			<TimeBasedTriggeringPolicy />
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="2">
+					<IfFileName glob="*/monitor_falcon.log" />
+					<IfLastModified age="15d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		
+		<RollingFile name="access" fileName="${LOG_HOME}/access.log" filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/access.%d{yyyyMMddHH}.log" append="true">
+			<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %msg%n" />
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+			<TimeBasedTriggeringPolicy />
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="2">
+					<IfFileName glob="*/access.*.log" />
+					<IfLastModified age="15d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+
+
+		<!-- 一般业务日志 -->
+		<RollingFile name="all" fileName="${LOG_HOME}/all.log" filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/all.%d{yyyyMMddHH}.log" append="true">
+			<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level %thread %c - %msg%n" />
+			<TimeBasedTriggeringPolicy />
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="2">
+					<IfFileName glob="*/all.*.log" />
+					<IfLastModified age="15d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		
+		<RollingFile name="jetty" fileName="${LOG_HOME}/jetty.log" filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/jetty.%d{yyyyMMddHH}.log" append="true">
+			<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level %thread %c - %msg%n" />
+			<TimeBasedTriggeringPolicy />
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="2">
+					<IfFileName glob="*/jetty.*.log" />
+					<IfLastModified age="15d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+
+		
+
+
+
+	</appenders>
+	<loggers>
+
+		<Logger name="com.inveno.baseFramework.config.ConfigServer"
+			level="info" additivity="false">
+			<AppenderRef ref="configChange" />
+		</Logger>
+		<Logger name="monitor_falcon" level="info" additivity="false">
+			<AppenderRef ref="monitor_falcon" />
+		</Logger>
+		
+		<Logger name="threadMonitor" level="info" additivity="false">
+			<AppenderRef ref="jetty" />
+		</Logger>
+		
+		<Logger name="access" level="info" additivity="false">
+			<AppenderRef ref="access" />
+		</Logger>
+
+		<Root level="info">
+			<AppenderRef ref="all" />
+		</Root>
+	</loggers>
+</Configuration>

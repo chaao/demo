@@ -5,11 +5,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import baseFramework.exception.ServerException;
-import redis.clients.jedis.Jedis;
+import baseFramework.redis.JedisPoolExecutor;
+import baseFramework.redis.ShardedJedisExecutor;
 import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.ShardedJedis;
-import redis.clients.jedis.ShardedJedisPool;
 
 /**
  * @author chao.li
@@ -21,9 +19,9 @@ public class Test {
 	@Autowired
 	private JedisCluster jedisCluster;
 	@Autowired
-	private JedisPool jedisPool;
+	private JedisPoolExecutor jedisPoolExecutor;
 	@Autowired
-	private ShardedJedisPool shardedJedisPool;
+	private ShardedJedisExecutor shardedJedisExecutor;
 
 	public String read(String key) {
 
@@ -44,32 +42,12 @@ public class Test {
 		}
 	}
 
-	public String read1(String key) {
-		Jedis jedis = null;
-		try {
-			jedis = jedisPool.getResource();
-			return jedis.get(key);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (jedis != null)
-				jedis.close();
-		}
-		return null;
+	public String readWithPool(String key) {
+		return jedisPoolExecutor.get(key);
 	}
 
-	public String read2(String key) {
-		ShardedJedis jedis = null;
-		try {
-			jedis = shardedJedisPool.getResource();
-			return jedis.get(key);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (jedis != null)
-				jedis.close();
-		}
-		return null;
+	public String readWithShard(String key) {
+		return shardedJedisExecutor.get(key);
 	}
 
 }

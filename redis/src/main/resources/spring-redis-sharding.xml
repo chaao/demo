@@ -17,12 +17,13 @@
 		<!--是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个 -->
 		<property name="testOnBorrow" value="true" />
 	</bean>
-	<bean id="shardedJedisPool" class="baseFramework.redis.ShardedJedisFactory">
+	<bean id="shardedJedisExecutor" class="baseFramework.redis.ShardedJedisExecutorFactory">
 		<property name="addressConfig">
 			<value>classpath:redis.properties</value>
 		</property>
 		<property name="addressKeyPrefix" value="redis.address" />   <!-- 属性文件里 key的前缀 -->
 		<property name="timeout" value="500" />
+		<property name="maxRedirections" value="3" /> <!-- 重试次数 -->
 		<property name="genericObjectPoolConfig" ref="jedisPoolConfig" />
 	</bean> 
 	

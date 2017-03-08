@@ -17,14 +17,11 @@
 		<!--是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个 -->
 		<property name="testOnBorrow" value="true" />
 	</bean>
-	<bean id="jedisCluster" class="baseFramework.redis.JedisClusterFactory">
-		<property name="addressConfig">
-			<value>classpath:redis.properties</value>
-		</property>
-		<property name="addressKeyPrefix" value="redis.adress" />   <!-- 属性文件里 key的前缀 -->
-		<property name="timeout" value="100" />
-		<property name="maxRedirections" value="3" /> <!-- 重试次数 -->
+	<bean id="jedisPool" class="baseFramework.redis.JedisFactory">
 		<property name="genericObjectPoolConfig" ref="jedisPoolConfig" />
+		<property name="host" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="timeout" value="${redis.timeout}" />
 	</bean> 
 	
 </beans>

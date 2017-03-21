@@ -29,8 +29,10 @@ public class Test {
 
 		User user = new User();
 		BeanUtils.populate(user, map);
-
 		System.out.println(user);
+		
+		Map<String, String> map1 = BeanUtils.describe(user);
+		System.out.println(map1);
 	}
 
 }

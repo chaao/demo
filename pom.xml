@@ -31,6 +31,7 @@
 		<module>dubbo</module>
 		<module>redis</module>
 		<module>deployer</module>
+		<module>elasticsearch</module>
 	</modules>
 
 

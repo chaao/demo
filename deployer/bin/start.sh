@@ -1,7 +1,8 @@
 #/bin/sh
 
 ############ define some various #####################
-MAINCLASS=launcher.WebLauncher
+MAINCLASS=launcher.
+REAL_LOG_PATH=/data/logs/test
 #JAVA=/usr/jdk1.8.0_65/bin/java
 ######################################################
 
@@ -36,9 +37,11 @@ done
 
 
 ########### make log dir #########
-if [ ! -e "${HOME}/logs" ]; then
-        mkdir -p ${HOME}/logs
+if [ ! -e "${REAL_LOG_PATH}" ]; then
+        mkdir -p ${REAL_LOG_PATH}
 fi
+rm -rf ${HOME}/logs
+ln -s ${REAL_LOG_PATH} ${HOME}/logs
 
 
 ######## function ########

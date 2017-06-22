@@ -32,7 +32,8 @@
 		<module>redis</module>
 		<module>deployer</module>
 		<module>elasticsearch</module>
-	</modules>
+        <module>druid</module>
+    </modules>
 
 
 	<properties>

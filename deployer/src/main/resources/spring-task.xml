@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+	   " default-autowire="byName">
+
+	<!-- 启动定时器 -->
+	<task:annotation-driven scheduler="myScheduler"/>
+	<task:scheduler id="myScheduler" pool-size="10"/>
+
+	<bean id="reportTask" class="com.inveno.ad.feedback.service.ReportService" />
+	<task:scheduled-tasks>
+		<task:scheduled ref="reportTask" method="process" cron="${task.report.cron}"/>
+	</task:scheduled-tasks>
+
+</beans>

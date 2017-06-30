@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		"
+	   default-autowire="byName">
+
+
+	<!-- 自动扫描包路劲 -->
+	<context:annotation-config/>
+
+	<!-- properties -->
+	<context:property-placeholder location="classpath*:*.properties"/>
+
+	<!-- other xml -->
+	<import resource="spring-db.xml"/>
+	<import resource="spring-task.xml"/>
+
+	<context:component-scan base-package="com.inveno.ad.feeder"/>
+
+	<!-- 用于持有ApplicationContext,可以使用SpringContextHolder.getBean('xxxx')的静态方法得到spring bean对象 -->
+	<bean class="com.inveno.baseFramework.utils.SpringContextHolder" />
+
+</beans>
